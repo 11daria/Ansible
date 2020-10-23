@@ -1,0 +1,29 @@
+---
+# tasks file for role_apache
+- name: install apache2
+  apt: name=apache2 update_cache=yes state=latest
+
+- name: enabled mod_rewrite
+  apache2_module: name=rewrite state=present
+
+- name: Create document root
+  file:
+    path: "/var/www/{{ http_host }}"
+    state: directory
+    owner: "{{ app_user }}"
+    mode: '0755'
+
+- name: Set up Apache virtualhost
+  template:
+    src: "files/apache.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+  notify: Reload Apache
+
+- name: Enable new site
+  shell: /usr/sbin/a2ensite {{ http_conf }}
+  notify: Reload Apache
+
+- name: Disable default Apache site
+  shell: /usr/sbin/a2dissite 000-default.conf
+  when: disable_default
+  notify: Reload Apache

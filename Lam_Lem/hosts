@@ -1,0 +1,6 @@
+[node1]
+ubuntu ansible_host=54.212.134.212 ansible_user=ubuntu ansible_ssh_private_key_file='/home/pingvin/Загрузки/TEST.pem'
+
+[node2]
+ubuntu ansible_host=34.217.191.207 ansible_user=ubuntu ansible_ssh_private_key_file='/home/pingvin/Загрузки/new_keys.pem'
+

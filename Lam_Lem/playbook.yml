@@ -1,0 +1,24 @@
+- name: node1
+  hosts: group1
+  become: yes
+  roles:
+   - role_apache
+   - role_Mysql
+   - role_PHP
+  tasks:
+    - name: Install prerequisites
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+      loop: [ 'aptitude' ]
+
+- name: node2
+  hosts: group2
+  become: yes
+  roles:
+   - role_nginx
+   - role_Mysql
+   - role_PHP
+  tasks: 
+    - name: Install prerequisites
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get$
+      loop: [ 'aptitude' ]
+
