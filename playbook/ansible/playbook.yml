@@ -1,0 +1,12 @@
+---
+- name: Tomcat-server
+  hosts: myserver
+  become: yes
+  roles:
+    - tomcat-role
+
+- name: Nginx-server
+  hosts: nginxserver
+  become: yes
+  roles:
+    - nginx-role
