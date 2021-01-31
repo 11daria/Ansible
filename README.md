@@ -23,3 +23,4 @@ RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
+https://devopscube.com/how-to-install-latest-sonatype-nexus-3-on-linux/
