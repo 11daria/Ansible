@@ -1,0 +1,15 @@
+events {}
+http { 
+        upstream backend {
+                server 10.26.1.167:8080;
+                server 10.26.1.217:8080;
+                server 10.26.1.163:8080;
+        }
+server {
+  listen 80;
+    location / { 
+    proxy_pass http://backend;
+   }
+ }
+}
+

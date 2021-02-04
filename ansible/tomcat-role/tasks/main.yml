@@ -1,0 +1,86 @@
+---
+# tasks file for tomcat-role
+- name: Add EPEL repository
+  yum:
+    name: epel-release
+    state: present
+
+- name: Install basic packages
+  package:
+    name: ['wget']
+    state: present
+
+- name: Install Java 8 CentOS
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: add tomcat group
+  group:
+    name: tomcat
+
+- name: add "tomcat" user
+  user:
+    name: tomcat
+    group: tomcat
+    home: /usr/share/tomcat
+    createhome: no
+    system: yes
+
+- name: create /opt/tomcat directory
+  file:
+    path: /opt/tomcat
+    state: directory
+    mode: 0755
+
+- name: download & unarchive
+  unarchive:
+    src: https://www2.apache.paket.ua/tomcat/tomcat-9/v9.0.41/bin/apache-tomcat-9.0.41.tar.gz
+    dest: /opt/tomcat
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Change ownership
+  file:
+    path: /opt/tomcat
+    owner: tomcat
+    group: tomcat
+    mode: "u+rwx,g+rx,o=rx"
+    recurse: yes
+    state: directory
+
+- name: Copy Tomcat service from local to remote
+  copy:
+     src: tomcat.service
+     dest: /etc/systemd/system/tomcat.service
+     mode: 0755
+ #    become: yes
+
+- name: Start and enable Tomcat service
+  systemd:
+    name: tomcat
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: firewall
+  firewalld:
+    port: 8080/tcp
+    permanent: true
+    state: enabled
+    immediate: yes
+
+- name: Script nexus
+  copy:
+     src: nexus.sh
+     dest: /root
+     mode: 0755
+
+- name: New hostname
+  script: hostname.sh
