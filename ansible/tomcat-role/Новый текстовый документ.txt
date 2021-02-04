@@ -1,0 +1,80 @@
+---
+# tasks file for tomcat-role
+- name: Add EPEL repository
+  yum:
+    name: epel-release
+    state: present
+
+- name: Install basic packages
+  package:
+    name: ['wget']
+    state: present
+
+- name: Install Java 8 CentOS
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: add nexus group
+  group:
+    name: nexus
+
+- name: add "tomcat" user
+  user:
+    name: tomcat
+    group: tomcat
+    home: /usr/share/nexus
+
+- name: create /opt/nexus directory
+  file:
+    path: /opt/nexus
+    state: directory
+    mode: 0755
+
+- name: download & unarchive
+  unarchive:
+    src: https://sonatype-download.lobal.ssl.fastly.net/nexus/3/nexus-3.0.2-02-unix.tar.gz
+    dest: /opt/nexus
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Change ownership
+  file:
+    path: /opt/nexus
+    owner: nexus
+    group: nexus
+    mode: "u+rwx,g+rx,o=rx"
+    recurse: yes
+    state: directory
+
+- name: Copy Tomcat service from local to remote
+  copy:
+     src: nexus.rc
+     dest: /opt/nexus/bin/nexus.rc
+     mode: 0755
+
+- name: symlink 
+  command: ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+
+- name: enable nexus service
+  service:
+    name: nexus
+    enabled: yes
+
+- name: start nexus
+  service:
+    name: nexus
+    state: started
+
+- name: start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: firewall
+  firewalld:
+    port: 8081/tcp
+    permanent: true
+    state: enabled
+    immediate: yes
