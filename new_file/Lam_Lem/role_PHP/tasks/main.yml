@@ -1,0 +1,10 @@
+---
+# tasks file for role_PHP
+- name: Install php
+  apt: name={{ item }} update_cache=yes state=latest
+  loop: [ 'php', 'php-mysql', 'libapache2-mod-php' ]
+
+- name: Sets Up PHP Info Page
+  template:
+    src: "files/info.php.j2"
+    dest: "/var/www/{{ http_host }}/info.php"
