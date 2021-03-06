@@ -39,6 +39,7 @@
     permanent: true
     state: enabled
     immediate: yes
+
 - name: firewall
   firewalld:
     port: 8080/tcp
@@ -47,5 +48,7 @@
     immediate: yes
 
 - name: Patch SELinux
-
   command: setsebool httpd_can_network_connect 1
+
+- name: New hostname
+  script: conf/hostname.sh

@@ -46,6 +46,19 @@
 
 
 - name: Configurate datadog for tomcat
-  script: datadog.sh
+  script: conf/datadog.sh
 
+- name: Configurate for nginx
+  copy:
+    src: conf/conf.yaml
+    dest: /etc/datadog-agent/conf.d/nginx.d/conf.yaml
+    owner: root
+    group: root
+    mode: 0644
 
+- name: Open 81 port 
+  firewalld:
+    port: 81/tcp
+    permanent: true
+    state: enabled
+    immediate: yes

@@ -1,0 +1,12 @@
+[tomcat]
+#tomcat1 ansible_ssh_host=10.26.1.167
+#tomcat2 ansible_ssh_host=10.26.1.217
+tomcat3 ansible_ssh_host=10.26.1.163
+#tomcat4 ansible_ssh_host=10.26.0.182
+
+[nginx]
+#nginx1 ansible_ssh_host=10.26.1.208
+
+
+
+

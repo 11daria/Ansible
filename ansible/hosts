@@ -1,9 +1,15 @@
 [myserver]
-#tomcat1 ansible_ssh_host=10.26.1.198
+#tomcat1 ansible_ssh_host=10.26.1.167
 #tomcat2 ansible_ssh_host=10.26.1.217
 #tomcat3 ansible_ssh_host=10.26.1.163
-tomcat4 ansible_ssh_host=10.26.2.189
+tomcat4 ansible_ssh_host=10.26.0.182
 
 [nginxserver]
 #nginx ansible_ssh_host=10.26.1.208
-# nginx ansible_ssh_host=10.26.2.189
+
+
+[nexus]
+#nexushost ansible_ssh_host=10.26.2.178
+
+
+

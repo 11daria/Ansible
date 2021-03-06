@@ -51,10 +51,10 @@
 
 - name: Copy Tomcat service from local to remote
   copy:
-     src: tomcat.service
+     src: conf/tomcat.service
      dest: /etc/systemd/system/tomcat.service
      mode: 0755
- #    become: yes
+
 
 - name: Start and enable Tomcat service
   systemd:
@@ -78,9 +78,9 @@
 
 - name: Script nexus
   copy:
-     src: nexus.sh
+     src: conf/nexus.sh
      dest: /root
      mode: 0755
 
 - name: New hostname
-  script: hostname.sh
+  script: conf/hostname.sh

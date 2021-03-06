@@ -1,21 +1,27 @@
 ---
+- name: Datadog-agent
+  hosts: nginxserver
+  become: yes
+  roles:
+    - datadog.datadog
+  vars:
+    datadog_api_key: "some_api_key"
+    datadog_site: "datadoghq.com"
+
 - name: Tomcat-server
   hosts: myserver
   become: yes
   roles:
    - tomcat-role
 
-#- name: Nginx-server
-#  hosts: nginxserver
-#  become: yes
-#  roles:
-#    - nginx-role
-
-- name: Datadog-agent
-  hosts: myserver1
+- name: Nginx-server
+  hosts: nginxserver
   become: yes
   roles:
-    - datadog.datadog
-  vars:
-    datadog_api_key: "2dfd375faa19e74d819e553018108736"
-    datadog_site: "datadoghq.com"
+    - nginx-role
+
+#- name: Nexus
+#  hosts: nexus
+#  become: yes
+#  roles:
+#    - nexus-role

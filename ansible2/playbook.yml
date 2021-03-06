@@ -1,0 +1,14 @@
+---
+- name: Tomcat-server
+  hosts: tomcat
+  become: yes
+  roles:
+   - promtail-tomcat
+
+- name: Nginx-server
+  hosts: nginx
+  become: yes
+  roles:
+    - promtail-nginx
+
+

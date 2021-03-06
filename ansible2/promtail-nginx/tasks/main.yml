@@ -1,0 +1,62 @@
+---
+# tasks file for promtail-nginx
+- name: add tomcat group
+  group:
+    name: promtail
+
+- name: add "tomcat" user
+  user:
+    name: promtail
+    group: promtail
+    home: /usr/share/promtail
+    createhome: no
+    system: yes
+
+- name: download & unarchive
+  get_url: url=https://github.com/grafana/loki/releases/download/v1.6.1/promtail-linux-amd64.zip dest=/usr/local/bin/promtail.gz
+
+- name: unarchive
+  unarchive:
+    src: /usr/local/bin/promtail.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+
+- name: Set UI access credentials
+  template:
+    src: config-promtail.yml.j2
+    dest: /usr/local/bin/config-promtail.yml
+ # notify: restart promtail
+
+- name: Copy Tomcat service from local to remote
+  copy:
+     src: promtail.service
+     dest: /etc/systemd/system/promtail.service
+     mode: 0755
+  become: yes
+
+- name: Start and enable Tomcat service
+  systemd:
+    name: promtail
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: firewall
+  firewalld:
+    port: 9081/tcp
+    permanent: true
+    state: enabled
+    immediate: yes
+
+- name: add
+  user:
+    name: promtail
+    groups: systemd-journal,nginx
+    append: yes
+
